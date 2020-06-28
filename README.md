@@ -1,6 +1,6 @@
-# Mountains API
+# TS Mongo Codegen Starter
 
-Mountains API was created by [TS Mongo Codegen](https://elevatejs.com/blog/ts-mongo-codegen).
+A starter repo to create [TS Mongo Codegen](https://elevatejs.com/blog/ts-mongo-codegen) APIs.
 
 ### Secrets
 
@@ -50,9 +50,3 @@ type Mutation {
 `yarn generate`
 
 Generate resolvers and typings based on schema
-
-### Scrape
-
-`yarn scrape`
-
-Scrape wikipedia mountains using `cheerio` and insert into our mongo db using ApolloClient.
