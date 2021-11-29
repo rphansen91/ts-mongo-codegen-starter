@@ -16,7 +16,7 @@
     "@elevatejs/ts-mongo-codegen": "^2.0.0",
     "@graphql-tools/schema": "^6.0.11",
     "apollo-boost": "^0.4.9",
-    "apollo-server": "^2.15.0",
+    "apollo-server": "^2.25.3",
     "dotenv": "^8.2.0",
     "graphql": "^15.1.0",
     "graphql-tag": "^2.10.3",
