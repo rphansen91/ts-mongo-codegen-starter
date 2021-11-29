@@ -1,21 +1,28 @@
 import { config } from 'dotenv'
-import { mongoConnect } from 'ts-mongo-codegen'
+import { MongoClient } from 'mongodb'
 import { mongoCollectionFactory } from './types.generated'
 
 config()
 
-const uri = process.env.MONGO_URI || ''
-const name = process.env.MONGO_NAME || ''
+const uri = process.env.MONGO_URI || 'mongodb://localhost:27017'
+const name = process.env.MONGO_NAME || 'test'
 
 if (!uri) throw new Error('Mongo connection string not found, add MONGO_URI to .env')
 if (!name) throw new Error('Mongo name string not found, add MONGO_NAME to .env')
 
-const mongoConnection = mongoConnect(uri)
+const client = new MongoClient(uri)
+const db = client.db(name)
+
+export const collections = mongoCollectionFactory(db)
+
+export const connect = async () => {
+  await client.connect()
+}
 
 export const context = async () => {
   // Executed every request
-  const db = (await mongoConnection).db(name)
-  return mongoCollectionFactory(db)
+  // const db = (await mongoConnection).db(name)
+  return collections
 }
 
 export type ThenArg<T> = T extends PromiseLike<infer U> ? U : T

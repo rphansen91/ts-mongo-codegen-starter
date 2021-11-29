@@ -1,6 +1,6 @@
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { addResolveFunctionsToSchema } from 'apollo-server'
-import { graphqlTypeDate, graphqlTypeObjectId, makeAugmentedSchema, mongoTypeDefs } from 'ts-mongo-codegen'
+import { graphqlTypeDate, graphqlTypeObjectId, makeAugmentedSchema, mongoTypeDefs } from '@elevatejs/ts-mongo-codegen'
 import { rootSchema } from './gql/root'
 
 // Make an executable schema with the mongo types and our custom mountain schema type
