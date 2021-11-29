@@ -1,5 +1,5 @@
 {
-  "schema": ["./node_modules/@elevatejs/ts-mongo-codegen/dist/types/mongo-types.ts", "./src/gql/*.ts"],
+  "schema": ["./node_modules/@elevatejs/ts-mongo-codegen/dist/types/mongo-types.ts", "./src/schemas/*.ts"],
   "generates": {
     "./src/types.generated.ts": {
       "plugins": [

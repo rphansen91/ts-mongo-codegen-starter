@@ -114,12 +114,6 @@ export type TextSearch = {
   diacriticSensitive?: Maybe<Scalars['Boolean']>;
 };
 
-export type User = {
-  __typename?: 'User';
-  id?: Maybe<Scalars['ObjectId']>;
-  name?: Maybe<Scalars['String']>;
-};
-
 export type Query = {
   __typename?: 'Query';
   empty?: Maybe<Scalars['String']>;
@@ -128,6 +122,12 @@ export type Query = {
 export type Mutation = {
   __typename?: 'Mutation';
   empty?: Maybe<Scalars['String']>;
+};
+
+export type User = {
+  __typename?: 'User';
+  id?: Maybe<Scalars['ObjectId']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 
@@ -224,9 +224,9 @@ export type ResolversTypes = {
   DateFilter: DateFilter;
   ObjectIdFilter: ObjectIdFilter;
   TextSearch: TextSearch;
-  User: ResolverTypeWrapper<User>;
   Query: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
+  User: ResolverTypeWrapper<User>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -246,47 +246,45 @@ export type ResolversParentTypes = {
   DateFilter: DateFilter;
   ObjectIdFilter: ObjectIdFilter;
   TextSearch: TextSearch;
-  User: User;
   Query: {};
   Mutation: {};
+  User: User;
 };
 
-export type CollectionDirectiveArgs = {
-  name: Scalars['String'];
-  crud?: Maybe<Scalars['Boolean']>;
-};
+export type CollectionDirectiveArgs = {   name: Scalars['String'];
+  crud?: Maybe<Scalars['Boolean']>; };
 
 export type CollectionDirectiveResolver<Result, Parent, ContextType = any, Args = CollectionDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
-export type FilterDirectiveArgs = {};
+export type FilterDirectiveArgs = {  };
 
 export type FilterDirectiveResolver<Result, Parent, ContextType = any, Args = FilterDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
-export type TextsearchDirectiveArgs = {};
+export type TextsearchDirectiveArgs = {  };
 
 export type TextsearchDirectiveResolver<Result, Parent, ContextType = any, Args = TextsearchDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
-export type InsertDirectiveArgs = {};
+export type InsertDirectiveArgs = {  };
 
 export type InsertDirectiveResolver<Result, Parent, ContextType = any, Args = InsertDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
-export type UpdateDirectiveArgs = {};
+export type UpdateDirectiveArgs = {  };
 
 export type UpdateDirectiveResolver<Result, Parent, ContextType = any, Args = UpdateDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
-export type UnsetDirectiveArgs = {};
+export type UnsetDirectiveArgs = {  };
 
 export type UnsetDirectiveResolver<Result, Parent, ContextType = any, Args = UnsetDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
-export type SetDirectiveArgs = {};
+export type SetDirectiveArgs = {  };
 
 export type SetDirectiveResolver<Result, Parent, ContextType = any, Args = SetDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
-export type IncDirectiveArgs = {};
+export type IncDirectiveArgs = {  };
 
 export type IncDirectiveResolver<Result, Parent, ContextType = any, Args = IncDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
-export type DecDirectiveArgs = {};
+export type DecDirectiveArgs = {  };
 
 export type DecDirectiveResolver<Result, Parent, ContextType = any, Args = DecDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
@@ -298,12 +296,6 @@ export interface ObjectIdScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'ObjectId';
 }
 
-export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
-  id?: Resolver<Maybe<ResolversTypes['ObjectId']>, ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
@@ -312,12 +304,18 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  id?: Resolver<Maybe<ResolversTypes['ObjectId']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Date?: GraphQLScalarType;
   ObjectId?: GraphQLScalarType;
-  User?: UserResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
 };
 
 
@@ -363,7 +361,7 @@ export const getUsersCollection = (db: Db) => db.collection<User>('users')
 
 export const userResolvers: UserResolvers<IUserContext> = { id: fromMongoId }
 
-export type IUserFilterArgs = {}
+export type IUserFilterArgs = {  }
 
 export type IUserFindArgs = { filter: IUserFilterArgs, pagination: Pagination, sort: Sort }
 
@@ -374,14 +372,14 @@ export type IUsersFindByIdsArgs = { ids: ObjectId[]; filter?: any; }
 export const userQueryResolvers = {
   async findUsers(_: any, { filter, pagination, sort }: IUserFindArgs, context: IUserContext) {
     const query = mapFilterToMongo(filter || {})
-
+    
     const total = () => context.users.find(query).count()
     const data = () => paginateCursor(
       context.users.find(query),
       { pagination, sort }
     ).toArray()
     return {
-      total,
+      total, 
       data
     }
   },
@@ -395,23 +393,23 @@ export const userQueryResolvers = {
   },
 }
 
-export type IUserInsert = {}
+export type IUserInsert = {  }
 
 export type IUserInsertArgs = { user: IUserInsert }
 
 export type IUsersInsertManyArgs = { users: IUserInsert[] }
 
-export type IUserSetArgs = {}
+export type IUserSetArgs = {  }
 
-export type IUserUnsetArgs = {}
+export type IUserUnsetArgs = {  }
 
-export type IUserDecArgs = {}
+export type IUserDecArgs = {  }
 
-export type IUserIncArgs = {}
+export type IUserIncArgs = {  }
 
-export type IUserUpdateArgs = { id: ObjectId, filter: any, }
+export type IUserUpdateArgs = { id: ObjectId, filter: any,  }
 
-export type IUsersUpdateManyArgs = { ids: ObjectId[], filter: any, }
+export type IUsersUpdateManyArgs = { ids: ObjectId[], filter: any,  }
 
 export type IUserRemoveArgs = { id: ObjectId, filter: any }
 
@@ -431,8 +429,9 @@ export const userMutationResolvers = {
 }
 
 export const userCrudResolvers = { Query: userQueryResolvers, Mutation: userMutationResolvers, User: userResolvers }
+export const crudResolvers = [userCrudResolvers]
 
-export function mongoCollectionFactory(db: Db) {
+export function mongoCollectionFactory (db: Db) {
   const users = getUsersCollection(db)
 
   return {

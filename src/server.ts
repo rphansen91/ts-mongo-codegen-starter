@@ -1,18 +1,19 @@
-import { config } from 'dotenv'
-import { ApolloServer } from 'apollo-server'
-import { schema } from './schema'
-import { context } from './context'
+import { port } from './options';
+import { ApolloServer } from 'apollo-server';
+import { schema } from './schema';
+import { context, connect } from './context';
 
-config()
-const port = process.env.PORT || 8081
-new ApolloServer({
-  context,
-  schema,
-})
-  .listen(port)
+connect()
+  .then(() => {
+    console.log('Connected');
+    return new ApolloServer({
+      context,
+      schema,
+    }).listen(port);
+  })
   .then(({ url }) => {
-    console.log(`Listening at ${url}`)
+    console.log(`Listening at ${url}`);
   })
   .catch((err) => {
-    console.log(err)
-  })
+    console.log(err);
+  });

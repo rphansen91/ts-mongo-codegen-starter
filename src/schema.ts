@@ -1,27 +1,41 @@
-import { makeExecutableSchema } from '@graphql-tools/schema'
-import { addResolveFunctionsToSchema } from 'apollo-server'
-import { graphqlTypeDate, graphqlTypeObjectId, makeAugmentedSchema, mongoTypeDefs } from '@elevatejs/ts-mongo-codegen'
-import { rootSchema } from './gql/root'
+/* eslint-disable @typescript-eslint/no-var-requires */
+import { makeExecutableSchema, addResolversToSchema } from '@graphql-tools/schema';
+import { mergeResolvers } from '@graphql-tools/merge';
+import { makeAugmentedSchema, mongoTypeDefs } from '@elevatejs/ts-mongo-codegen';
+import { crudResolvers } from './types.generated';
+import { resolve } from 'path';
+import fs from 'fs';
 
-// Make an executable schema with the mongo types and our custom mountain schema type
+const schemaPaths = readFullFilePaths('schemas');
+const resolverPaths = readFullFilePaths('resolvers');
+
+const typeDefs = [mongoTypeDefs];
+const resolvers = [...crudResolvers];
+
+schemaPaths.forEach((path) => {
+  const schema = require(path).default;
+  if (!schema) throw new Error(`No schema default export found at "${path}"`);
+  typeDefs.push(schema);
+});
+
+resolverPaths.forEach((path) => {
+  const resolver = require(path).default;
+  if (!resolver) throw new Error(`No resolver default export found at "${path}"`);
+  resolvers.push(resolver);
+});
+
 const executableSchema = makeExecutableSchema({
-  typeDefs: [mongoTypeDefs, rootSchema],
-})
+  typeDefs,
+});
 
-// Add CRUD operations to the Mountain type by augmenting the schema
-export const schema = makeAugmentedSchema(executableSchema)
+const augmentedSchema = makeAugmentedSchema(executableSchema);
 
-// The mountainResolvers, mountainMutationResolvers, and mountainQueryResolvers are generated types
-// Run `yarn generate` to update types or add more
-const resolvers = {
-  Date: graphqlTypeDate,
-  Mutation: {},
-  ObjectId: graphqlTypeObjectId,
-  Query: {},
+export const schema = addResolversToSchema({
+  resolvers: mergeResolvers(resolvers),
+  schema: augmentedSchema,
+});
+
+function readFullFilePaths(type: string) {
+  const dir = resolve(__dirname, type);
+  return fs.readdirSync(dir).map((filename) => resolve(dir, filename));
 }
-
-// Finally we add our generated resolvers to the schema
-addResolveFunctionsToSchema({
-  resolvers,
-  schema,
-})
